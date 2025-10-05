@@ -21,20 +21,37 @@ import django
 django.setup()
 
 # Run migrations and populate data on deployment
-try:
-    from django.core.management import execute_from_command_line
-    
-    # Check if database needs setup
-    from django.db import connection
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='catalog_category';")
-        if not cursor.fetchone():
-            # Database is empty, run migrations and populate data
-            execute_from_command_line(['manage.py', 'migrate', '--noinput'])
+if os.environ.get('VERCEL'):
+    # For Vercel deployment - setup in-memory database
+    try:
+        from django.core.management import execute_from_command_line
+        from catalog.models import Category, Service
+        
+        # Run migrations for in-memory database
+        execute_from_command_line(['manage.py', 'migrate', '--run-syncdb'])
+        
+        # Populate data if empty
+        if not Category.objects.exists():
             execute_from_command_line(['manage.py', 'populate_data'])
-except Exception as e:
-    # Log error but continue
-    print(f"Setup error (continuing): {e}")
+            
+    except Exception as e:
+        print(f"Database setup error: {e}")
+else:
+    # Local development - check and setup file-based SQLite
+    try:
+        from django.core.management import execute_from_command_line
+        
+        # Check if database needs setup
+        from django.db import connection
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='catalog_category';")
+            if not cursor.fetchone():
+                # Database is empty, run migrations and populate data
+                execute_from_command_line(['manage.py', 'migrate', '--noinput'])
+                execute_from_command_line(['manage.py', 'populate_data'])
+    except Exception as e:
+        # Log error but continue
+        print(f"Setup error (continuing): {e}")
 
 application = get_wsgi_application()
 

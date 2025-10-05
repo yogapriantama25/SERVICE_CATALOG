@@ -19,5 +19,8 @@
       "src": "/(.*)",
       "dest": "service_catalog_project/wsgi.py"
     }
-  ]
+  ],
+  "env": {
+    "VERCEL": "1"
+  }
 }
