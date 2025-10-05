@@ -38,10 +38,16 @@ def service_catalog_list(request):
     for service in services:
         service['category_name'] = get_category_name(service['category_id'])
     
+    # Get selected category name for display
+    selected_category_name = None
+    if category_id:
+        selected_category_name = get_category_name(category_id)
+    
     context = {
         'categories': categories,
         'services': services,
         'selected_category': category_id if category_id else None,
+        'selected_category_name': selected_category_name,
         'search_query': query,
     }
     return render(request, 'catalog/service_list.html', context)
@@ -84,10 +90,15 @@ def category_detail(request, category_id):
     for service in services:
         service['category_name'] = category['name']
     
+    # Calculate unique PICs for this category
+    unique_pics = set(service['pic'] for service in services)
+    unique_pic_count = len(unique_pics)
+    
     context = {
         'category': category,
         'services': services,
         'all_categories': all_categories,
+        'unique_pic_count': unique_pic_count,
     }
     return render(request, 'catalog/category_detail.html', context)
 

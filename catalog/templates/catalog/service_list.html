@@ -71,7 +71,7 @@
                     <option value="">Semua Kategori ({{ categories|length }})</option>
                     {% for category in categories %}
                         <option value="{{ category.id }}" 
-                                {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>
+                                {% if selected_category == category.id %}selected{% endif %}>
                             {{ category.name }} ({{ category.service_count }})
                         </option>
                     {% endfor %}
@@ -92,7 +92,7 @@
                         <i class="fas fa-info-circle me-1"></i>
                         Menampilkan {{ services|length }} layanan
                         {% if search_query %}untuk pencarian "{{ search_query }}"{% endif %}
-                        {% if selected_category %}dalam kategori "{{ categories|first }}"{% endif %}
+                        {% if selected_category_name %}dalam kategori "{{ selected_category_name }}"{% endif %}
                     </small>
                 </div>
                 <a href="{% url 'catalog:service_list' %}" class="btn btn-outline-secondary btn-sm">
