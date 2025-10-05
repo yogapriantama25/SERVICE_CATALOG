@@ -16,5 +16,9 @@
       "src": "/(.*)",
       "dest": "service_catalog_project/wsgi.py"
     }
-  ]
+  ],
+  "env": {
+    "DJANGO_SETTINGS_MODULE": "service_catalog_project.settings",
+    "VERCEL": "1"
+  }
 }
