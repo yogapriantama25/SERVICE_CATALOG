@@ -1,0 +1,244 @@
+{% extends 'catalog/base.html' %}
+{% load static %}
+
+{% block title %}Service Catalog - UMKT{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="hero-content">
+                    <h1 class="display-4 fw-bold mb-4">
+                        <i class="fas fa-list-alt me-3"></i>
+                        Service Catalog UMKT
+                    </h1>
+                    <p class="lead mb-4">
+                        Katalog lengkap layanan teknologi informasi untuk mendukung aktivitas akademik dan operasional 
+                        Universitas Muhammadiyah Kalimantan Timur.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <span class="badge bg-secondary-custom px-3 py-2">
+                            <i class="fas fa-shield-alt me-1"></i>Aman & Terpercaya
+                        </span>
+                        <span class="badge bg-secondary-custom px-3 py-2">
+                            <i class="fas fa-clock me-1"></i>24/7 Support
+                        </span>
+                        <span class="badge bg-secondary-custom px-3 py-2">
+                            <i class="fas fa-users me-1"></i>{{ services.count }}+ Layanan
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <div class="hero-stats">
+                    <div class="stats-card mb-3">
+                        <div class="stats-icon">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <div class="stats-number">{{ categories.count }}</div>
+                        <div class="text-muted">Kategori Layanan</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- Search and Filter Section -->
+    <div class="search-section">
+        <form method="GET" class="row g-4">
+            <div class="col-12">
+                <h3 class="text-primary-custom mb-4">
+                    <i class="fas fa-search me-2"></i>
+                    Cari Layanan IT
+                </h3>
+            </div>
+            <div class="col-lg-6">
+                <label for="search" class="form-label fw-semibold">
+                    <i class="fas fa-magnifying-glass me-1"></i>Kata Kunci
+                </label>
+                <input type="text" class="form-control form-control-lg" id="search" name="search" 
+                       value="{{ search_query }}" placeholder="Cari berdasarkan nama, deskripsi, PIC...">
+            </div>
+            <div class="col-lg-4">
+                <label for="category" class="form-label fw-semibold">
+                    <i class="fas fa-filter me-1"></i>Filter Kategori
+                </label>
+                <select class="form-select form-select-lg" id="category" name="category">
+                    <option value="">Semua Kategori ({{ categories.count }})</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" 
+                                {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>
+                            {{ category.name }} ({{ category.services.count }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-lg-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary btn-lg w-100">
+                    <i class="fas fa-search me-1"></i>Cari
+                </button>
+            </div>
+        </form>
+        
+        {% if search_query or selected_category %}
+        <div class="mt-4 pt-3 border-top">
+            <div class="d-flex align-items-center justify-content-between flex-wrap">
+                <div>
+                    <small class="text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Menampilkan {{ services.count }} layanan
+                        {% if search_query %}untuk pencarian "{{ search_query }}"{% endif %}
+                        {% if selected_category %}dalam kategori "{{ categories|first }}"{% endif %}
+                    </small>
+                </div>
+                <a href="{% url 'catalog:service_list' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-times me-1"></i>Reset Filter
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Services Grid -->
+    {% if services %}
+        <div class="row g-4">
+            {% for service in services %}
+            <div class="col-lg-6 col-xl-4">
+                <div class="card service-card h-100">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <span class="category-badge">{{ service.category.name }}</span>
+                        <small class="text-muted fw-medium">
+                            <i class="fas fa-user-tie me-1"></i>{{ service.pic }}
+                        </small>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-primary-custom fw-bold mb-3">
+                            <i class="fas fa-cogs me-2"></i>{{ service.name }}
+                        </h5>
+                        <p class="card-text text-muted flex-grow-1 mb-4">
+                            {{ service.description|truncatewords:25 }}
+                        </p>
+                        
+                        <div class="service-details mb-4">
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <small class="text-muted d-block mb-1">
+                                            <i class="fas fa-users me-1"></i>Pengguna:
+                                        </small>
+                                        <small class="fw-medium">{{ service.users|truncatewords:4 }}</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="info-item">
+                                        <small class="text-muted d-block mb-1">
+                                            <i class="fas fa-clock me-1"></i>SLA:
+                                        </small>
+                                        <small class="fw-medium">{{ service.sla|truncatewords:4 }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-auto">
+                            <a href="{% url 'catalog:service_detail' service.id %}" 
+                               class="btn btn-outline-primary w-100">
+                                <i class="fas fa-info-circle me-1"></i>Lihat Detail
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <small class="text-muted">
+                            <i class="fas fa-calendar-alt me-1"></i>
+                            Diperbarui {{ service.updated_at|timesince }} yang lalu
+                        </small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination Placeholder -->
+        {% if services.count > 12 %}
+        <div class="text-center mt-5">
+            <button class="btn btn-secondary" onclick="showMoreServices()">
+                <i class="fas fa-chevron-down me-1"></i>Muat Lebih Banyak
+            </button>
+        </div>
+        {% endif %}
+
+    {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <i class="fas fa-search fa-4x mb-4"></i>
+            <h4>Tidak ada layanan ditemukan</h4>
+            <p class="mb-4">
+                {% if search_query %}
+                    Tidak ada layanan yang cocok dengan pencarian "<strong>{{ search_query }}</strong>".
+                {% elif selected_category %}
+                    Tidak ada layanan dalam kategori yang dipilih.
+                {% else %}
+                    Belum ada layanan yang tersedia saat ini.
+                {% endif %}
+            </p>
+            <div class="d-flex gap-2 justify-content-center">
+                {% if search_query or selected_category %}
+                <a href="{% url 'catalog:service_list' %}" class="btn btn-primary">
+                    <i class="fas fa-refresh me-1"></i>Lihat Semua Layanan
+                </a>
+                {% endif %}
+                <a href="#" class="btn btn-outline-primary" onclick="document.getElementById('search').focus()">
+                    <i class="fas fa-search me-1"></i>Coba Pencarian Lain
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Quick Categories -->
+    {% if not search_query and not selected_category %}
+    <div class="mt-5">
+        <h3 class="text-primary-custom mb-4">
+            <i class="fas fa-layer-group me-2"></i>
+            Kategori Layanan
+        </h3>
+        <div class="row g-3">
+            {% for category in categories %}
+            <div class="col-md-6 col-lg-4">
+                <a href="{% url 'catalog:category_detail' category.id %}" class="text-decoration-none">
+                    <div class="card border-primary-custom h-100">
+                        <div class="card-body text-center">
+                            <div class="category-icon mb-3">
+                                <i class="fas 
+                                    {% if 'Autentikasi' in category.name %}fa-shield-alt
+                                    {% elif 'Akademik' in category.name %}fa-graduation-cap
+                                    {% elif 'Infrastruktur' in category.name %}fa-server
+                                    {% elif 'Email' in category.name %}fa-envelope
+                                    {% elif 'Website' in category.name %}fa-globe
+                                    {% else %}fa-headset{% endif %}
+                                text-primary-custom fa-2x"></i>
+                            </div>
+                            <h6 class="card-title text-primary-custom">{{ category.name }}</h6>
+                            <p class="card-text text-muted small">
+                                {{ category.services.count }} layanan tersedia
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function showMoreServices() {
+    // Placeholder for load more functionality
+    alert('Fitur "Muat Lebih Banyak" akan diimplementasikan dalam update selanjutnya.');
+}
+</script>
+{% endblock %}

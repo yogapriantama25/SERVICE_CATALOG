@@ -1,0 +1,327 @@
+{% extends 'catalog/base.html' %}
+{% load static %}
+
+{% block title %}{{ category.name }} - Service Catalog UMKT{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'catalog:service_list' %}">
+                    <i class="fas fa-home me-1"></i>Service Catalog
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+        </ol>
+    </nav>
+
+    <!-- Category Header -->
+    <div class="card mb-5">
+        <div class="card-header bg-primary-custom text-white">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="card-title h2 mb-2">
+                        <i class="fas 
+                            {% if 'Autentikasi' in category.name %}fa-shield-alt
+                            {% elif 'Akademik' in category.name %}fa-graduation-cap
+                            {% elif 'Infrastruktur' in category.name %}fa-server
+                            {% elif 'Email' in category.name %}fa-envelope
+                            {% elif 'Website' in category.name %}fa-globe
+                            {% else %}fa-headset{% endif %}
+                        me-3"></i>
+                        {{ category.name }}
+                    </h1>
+                    <p class="card-text mb-0 opacity-90">
+                        Kategori layanan teknologi informasi untuk mendukung kegiatan 
+                        {% if 'Autentikasi' in category.name %}keamanan dan akses sistem
+                        {% elif 'Akademik' in category.name %}akademik dan pembelajaran
+                        {% elif 'Infrastruktur' in category.name %}infrastruktur teknologi
+                        {% elif 'Email' in category.name %}komunikasi dan kolaborasi
+                        {% elif 'Website' in category.name %}portal dan informasi online
+                        {% else %}dukungan teknis{% endif %}
+                        di UMKT.
+                    </p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <div class="stats-summary">
+                        <div class="stats-card bg-secondary-custom text-primary-custom d-inline-block">
+                            <div class="stats-number h3 mb-0">{{ services.count }}</div>
+                            <div class="small">Layanan Tersedia</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services in Category -->
+    {% if services %}
+        <!-- Service Statistics -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="stats-card text-center">
+                    <div class="stats-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="stats-number">{{ services.count }}</div>
+                    <div class="text-muted">Total Layanan</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card text-center">
+                    <div class="stats-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stats-number">{{ services|length }}</div>
+                    <div class="text-muted">Layanan Aktif</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card text-center">
+                    <div class="stats-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="stats-number">{{ services|regroup:"pic"|length }}</div>
+                    <div class="text-muted">Tim PIC</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Grid -->
+        <div class="row g-4">
+            {% for service in services %}
+            <div class="col-lg-6 col-xl-4">
+                <div class="card service-card h-100">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <small class="text-muted fw-medium">
+                            <i class="fas fa-user-tie me-1"></i>{{ service.pic }}
+                        </small>
+                        <span class="badge bg-success">
+                            <i class="fas fa-check-circle me-1"></i>Aktif
+                        </span>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-primary-custom fw-bold mb-3">
+                            <i class="fas fa-cogs me-2"></i>{{ service.name }}
+                        </h5>
+                        <p class="card-text text-muted flex-grow-1 mb-4">
+                            {{ service.description|truncatewords:25 }}
+                        </p>
+                        
+                        <div class="service-details mb-4">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="info-item">
+                                        <small class="text-muted d-block mb-1">
+                                            <i class="fas fa-users me-1"></i>Target Pengguna:
+                                        </small>
+                                        <small class="fw-medium">{{ service.users }}</small>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="info-item">
+                                        <small class="text-muted d-block mb-1">
+                                            <i class="fas fa-clock me-1"></i>SLA:
+                                        </small>
+                                        <small class="fw-medium">{{ service.sla }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-auto">
+                            <a href="{% url 'catalog:service_detail' service.id %}" 
+                               class="btn btn-outline-primary w-100">
+                                <i class="fas fa-info-circle me-1"></i>Lihat Detail
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar-alt me-1"></i>
+                                {{ service.updated_at|timesince }} lalu
+                            </small>
+                            <small class="text-muted">
+                                <i class="fas fa-clipboard-list me-1"></i>
+                                {{ service.request_method|truncatewords:2 }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card mt-5">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h5 class="text-primary-custom mb-2">
+                            <i class="fas fa-rocket me-2"></i>Butuh Bantuan dengan {{ category.name }}?
+                        </h5>
+                        <p class="text-muted mb-md-0">
+                            Tim IT UMKT siap membantu Anda dengan semua layanan dalam kategori {{ category.name }}.
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <div class="d-flex flex-wrap gap-2 justify-content-md-end">
+                            <a href="tel:+62541777039" class="btn btn-primary">
+                                <i class="fas fa-phone me-1"></i>Hubungi Support
+                            </a>
+                            <a href="mailto:it-support@umkt.ac.id" class="btn btn-outline-primary">
+                                <i class="fas fa-envelope me-1"></i>Email
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <i class="fas fa-inbox fa-4x"></i>
+            <h4>Belum Ada Layanan</h4>
+            <p>Kategori <strong>{{ category.name }}</strong> belum memiliki layanan yang tersedia.</p>
+            <div class="mt-4">
+                <a href="{% url 'catalog:service_list' %}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left me-1"></i>Lihat Semua Layanan
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Navigation -->
+    <div class="mt-5">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <a href="{% url 'catalog:service_list' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i>Kembali ke Semua Layanan
+                    </a>
+                    
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-primary" onclick="filterByPIC()">
+                            <i class="fas fa-filter me-1"></i>Filter by PIC
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="shareCategory()">
+                            <i class="fas fa-share me-1"></i>Share Kategori
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Categories -->
+    <div class="mt-5">
+        <h4 class="text-primary-custom mb-4">
+            <i class="fas fa-layer-group me-2"></i>Kategori Layanan Lainnya
+        </h4>
+        <div class="row g-3">
+            {% for other_category in all_categories %}
+                {% if other_category.id != category.id %}
+                <div class="col-md-6 col-lg-4">
+                    <a href="{% url 'catalog:category_detail' other_category.id %}" class="text-decoration-none">
+                        <div class="card border-primary-custom h-100">
+                            <div class="card-body text-center">
+                                <div class="category-icon mb-3">
+                                    <i class="fas 
+                                        {% if 'Autentikasi' in other_category.name %}fa-shield-alt
+                                        {% elif 'Akademik' in other_category.name %}fa-graduation-cap
+                                        {% elif 'Infrastruktur' in other_category.name %}fa-server
+                                        {% elif 'Email' in other_category.name %}fa-envelope
+                                        {% elif 'Website' in other_category.name %}fa-globe
+                                        {% else %}fa-headset{% endif %}
+                                    text-primary-custom fa-2x"></i>
+                                </div>
+                                <h6 class="card-title text-primary-custom">{{ other_category.name }}</h6>
+                                <p class="card-text text-muted small">
+                                    {{ other_category.services.count }} layanan
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+function filterByPIC() {
+    // Get unique PICs for this category
+    const services = document.querySelectorAll('.service-card');
+    const pics = [];
+    
+    services.forEach(card => {
+        const picElement = card.querySelector('.card-header small');
+        if (picElement) {
+            const picText = picElement.textContent.trim().replace('👔 ', '').replace(/.*PIC\s*/, '');
+            pics.push(picText);
+        }
+    });
+    
+    const uniquePics = [...new Set(pics)];
+    
+    if (uniquePics.length > 1) {
+        const selectedPic = prompt(`Filter layanan berdasarkan PIC:\n\n${uniquePics.map((pic, index) => `${index + 1}. ${pic}`).join('\n')}\n\nMasukkan nomor pilihan:`);
+        
+        if (selectedPic && selectedPic >= 1 && selectedPic <= uniquePics.length) {
+            const picName = uniquePics[selectedPic - 1];
+            // Hide services that don't match the selected PIC
+            services.forEach(card => {
+                const cardPic = card.querySelector('.card-header small').textContent.trim().replace('👔 ', '').replace(/.*PIC\s*/, '');
+                if (cardPic !== picName) {
+                    card.parentElement.style.display = 'none';
+                } else {
+                    card.parentElement.style.display = 'block';
+                }
+            });
+        }
+    } else {
+        alert('Hanya ada satu PIC untuk kategori ini.');
+    }
+}
+
+function shareCategory() {
+    const url = window.location.href;
+    const title = '{{ category.name }} - Service Catalog UMKT';
+    const text = `Lihat layanan ${category.name} di Service Catalog UMKT`;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: title,
+            text: text,
+            url: url
+        });
+    } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(url).then(() => {
+            alert('Link kategori telah disalin ke clipboard!');
+        });
+    }
+}
+
+// Add animation on scroll
+document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.service-card');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('fade-in');
+                }, index * 100);
+            }
+        });
+    });
+    
+    cards.forEach(card => observer.observe(card));
+});
+</script>
+{% endblock %}

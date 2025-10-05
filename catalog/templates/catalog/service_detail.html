@@ -1,0 +1,298 @@
+{% extends 'catalog/base.html' %}
+{% load static %}
+
+{% block title %}{{ service.name }} - Service Catalog UMKT{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{% url 'catalog:service_list' %}">
+                    <i class="fas fa-home me-1"></i>Service Catalog
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{% url 'catalog:category_detail' service.category.id %}">
+                    {{ service.category.name }}
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{ service.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Main Service Details -->
+        <div class="col-lg-8">
+            <!-- Service Header Card -->
+            <div class="card service-detail-card mb-4">
+                <div class="service-detail-header">
+                    <div class="d-flex justify-content-between align-items-start flex-wrap">
+                        <div class="flex-grow-1">
+                            <h1 class="h2 mb-3">
+                                <i class="fas fa-cogs me-3"></i>{{ service.name }}
+                            </h1>
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <span class="badge bg-secondary-custom px-3 py-2">
+                                    <i class="fas fa-layer-group me-1"></i>{{ service.category.name }}
+                                </span>
+                                <span class="badge bg-light text-dark px-3 py-2">
+                                    <i class="fas fa-user-tie me-1"></i>{{ service.pic }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <div class="status-indicator">
+                                <i class="fas fa-circle text-success me-1"></i>
+                                <small class="text-white-50">Layanan Aktif</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if service.description %}
+                <div class="card-body">
+                    <h5 class="text-primary-custom mb-3">
+                        <i class="fas fa-info-circle me-2"></i>Deskripsi Layanan
+                    </h5>
+                    <p class="lead mb-0">{{ service.description }}</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Service Information Grid -->
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h6 class="fw-bold text-primary-custom mb-2">Target Pengguna</h6>
+                        <p class="mb-0">{{ service.users }}</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <h6 class="fw-bold text-primary-custom mb-2">Cara Request Layanan</h6>
+                        <p class="mb-0">{{ service.request_method }}</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h6 class="fw-bold text-primary-custom mb-2">Service Level Agreement</h6>
+                        <p class="mb-0">{{ service.sla }}</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h6 class="fw-bold text-primary-custom mb-2">Person in Charge</h6>
+                        <p class="mb-0">{{ service.pic }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h5 class="text-primary-custom mb-3">
+                        <i class="fas fa-rocket me-2"></i>Aksi Cepat
+                    </h5>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="{% url 'catalog:service_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>Kembali ke Daftar
+                        </a>
+                        <a href="{% url 'catalog:category_detail' service.category.id %}" class="btn btn-outline-primary">
+                            <i class="fas fa-layer-group me-1"></i>Layanan Lain di {{ service.category.name }}
+                        </a>
+                        <button class="btn btn-primary" onclick="requestService()">
+                            <i class="fas fa-paper-plane me-1"></i>Request Layanan Ini
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Quick Info Card -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary-custom text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-tachometer-alt me-2"></i>Informasi Cepat
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Status Layanan:</span>
+                        <span class="badge bg-success">
+                            <i class="fas fa-check-circle me-1"></i>Aktif
+                        </span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Kategori:</span>
+                        <span class="fw-medium">{{ service.category.name }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">PIC:</span>
+                        <span class="fw-medium">{{ service.pic }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">Terakhir Update:</span>
+                        <span class="fw-medium">{{ service.updated_at|date:"d M Y" }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Related Services -->
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0 text-primary-custom">
+                        <i class="fas fa-link me-2"></i>Layanan Terkait
+                    </h6>
+                </div>
+                <div class="card-body p-0">
+                    {% for related_service in service.category.services.all|slice:":4" %}
+                        {% if related_service.id != service.id and related_service.is_active %}
+                        <div class="p-3 border-bottom">
+                            <h6 class="mb-1">
+                                <a href="{% url 'catalog:service_detail' related_service.id %}" 
+                                   class="text-decoration-none text-primary-custom">
+                                    {{ related_service.name }}
+                                </a>
+                            </h6>
+                            <small class="text-muted">{{ related_service.description|truncatewords:10 }}</small>
+                        </div>
+                        {% endif %}
+                    {% empty %}
+                    <div class="p-3 text-center text-muted">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Tidak ada layanan terkait lainnya
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Contact Support -->
+            <div class="card">
+                <div class="card-header bg-secondary-custom">
+                    <h6 class="mb-0 text-primary-custom">
+                        <i class="fas fa-headset me-2"></i>Butuh Bantuan?
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <p class="small mb-3">
+                        Tim IT UMKT siap membantu Anda 24/7 untuk semua kebutuhan layanan teknologi informasi.
+                    </p>
+                    <div class="d-grid gap-2">
+                        <a href="tel:+62541777039" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-phone me-1"></i>Hubungi Helpdesk
+                        </a>
+                        <a href="mailto:it-support@umkt.ac.id" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-envelope me-1"></i>Email Support
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Timeline/History (Optional) -->
+    <div class="card mt-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0 text-primary-custom">
+                <i class="fas fa-history me-2"></i>Riwayat Layanan
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker bg-primary"></div>
+                    <div class="timeline-content">
+                        <h6 class="mb-1">Layanan Dibuat</h6>
+                        <small class="text-muted">{{ service.created_at|date:"d F Y H:i" }}</small>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker bg-success"></div>
+                    <div class="timeline-content">
+                        <h6 class="mb-1">Terakhir Diperbarui</h6>
+                        <small class="text-muted">{{ service.updated_at|date:"d F Y H:i" }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline {
+    position: relative;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--light-gray);
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 50px;
+    padding-bottom: 20px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: 6px;
+    top: 5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid white;
+    box-shadow: 0 0 0 2px var(--light-gray);
+}
+
+.timeline-content h6 {
+    margin-bottom: 5px;
+    color: var(--primary-color);
+}
+</style>
+
+<script>
+function requestService() {
+    // Placeholder for service request functionality
+    alert(`Untuk request layanan "${service.name}", silakan hubungi:\n\n` +
+          `${service.request_method}\n\n` +
+          `PIC: ${service.pic}\n` +
+          `SLA: ${service.sla}`);
+}
+
+// Add smooth scroll for internal links
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate cards on load
+    const cards = document.querySelectorAll('.info-card');
+    cards.forEach((card, index) => {
+        setTimeout(() => {
+            card.classList.add('fade-in');
+        }, index * 100);
+    });
+});
+</script>
+{% endblock %}
