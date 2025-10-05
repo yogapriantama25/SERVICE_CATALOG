@@ -1,4 +1,10 @@
 # Static data for the service catalog - no database required
+from datetime import datetime, timedelta
+from django.utils import timezone
+
+# Generate some realistic dates
+now = timezone.now()
+base_date = now - timedelta(days=30)
 
 CATEGORIES = [
     {
@@ -44,7 +50,9 @@ SERVICES = [
         'request_method': 'Self-Service Portal',
         'sla': '2 hours',
         'pic': 'Infrastructure Team',
-        'icon': 'fab fa-aws'
+        'icon': 'fab fa-aws',
+        'created_at': base_date,
+        'updated_at': now - timedelta(days=2)
     },
     {
         'id': 2,
