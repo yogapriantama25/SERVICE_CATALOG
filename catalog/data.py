@@ -9,212 +9,174 @@ base_date = now - timedelta(days=30)
 CATEGORIES = [
     {
         'id': 1,
-        'name': 'Infrastructure Services',
-        'description': 'Core infrastructure and platform services for development and operations',
-        'icon': 'fas fa-server'
-    },
-    {
-        'id': 2,
-        'name': 'Development Tools',
-        'description': 'Tools and services for software development and version control',
-        'icon': 'fas fa-code'
-    },
-    {
-        'id': 3,
-        'name': 'Security Services',
-        'description': 'Security, compliance, and access management services',
+        'name': 'Autentikasi & Akses',
+        'description': 'Layanan autentikasi dan kontrol akses untuk sistem kampus',
         'icon': 'fas fa-shield-alt'
     },
     {
-        'id': 4,
-        'name': 'Monitoring & Analytics',
-        'description': 'Monitoring, logging, and analytics platforms',
-        'icon': 'fas fa-chart-bar'
+        'id': 2,
+        'name': 'Aplikasi Akademik',
+        'description': 'Sistem aplikasi untuk kegiatan akademik dan pembelajaran',
+        'icon': 'fas fa-graduation-cap'
     },
     {
-        'id': 5,
-        'name': 'Communication & Collaboration',
-        'description': 'Communication tools and collaboration platforms',
-        'icon': 'fas fa-comments'
+        'id': 3,
+        'name': 'Aplikasi Kepegawaian',
+        'description': 'Sistem manajemen kepegawaian dan administrasi SDM',
+        'icon': 'fas fa-users'
+    },
+    {
+        'id': 4,
+        'name': 'Layanan Pendukung',
+        'description': 'Layanan pendukung operasional kampus',
+        'icon': 'fas fa-cogs'
     }
 ]
 
 SERVICES = [
-    # Infrastructure Services
+    # Autentikasi & Akses
     {
         'id': 1,
-        'name': 'AWS EC2 Instance',
-        'description': 'Virtual machine instances for computing needs with flexible sizing options',
+        'name': 'Single Sign-On (SSO)',
+        'description': 'Layanan autentikasi terpusat untuk akses ke berbagai sistem kampus',
         'category_id': 1,
-        'users': 150,
-        'request_method': 'Self-Service Portal',
-        'sla': '2 hours',
-        'pic': 'Infrastructure Team',
-        'icon': 'fab fa-aws',
+        'users': 'Dosen, Mahasiswa, Staf',
+        'request_method': 'Helpdesk IT',
+        'sla': 'Respon 30 menit, selesai 1 jam',
+        'pic': 'Tim Infrastruktur',
+        'icon': 'fas fa-key',
+        'created_at': base_date,
+        'updated_at': now - timedelta(days=1)
+    },
+    {
+        'id': 2,
+        'name': 'Email UMKT (Google Workspace)',
+        'description': 'Layanan email institusi berbasis Google Workspace',
+        'category_id': 1,
+        'users': 'Dosen, Mahasiswa, Staf',
+        'request_method': 'Helpdesk IT',
+        'sla': 'Respon 1 jam, selesai 1 hari',
+        'pic': 'Tim Infrastruktur',
+        'icon': 'fab fa-google',
         'created_at': base_date,
         'updated_at': now - timedelta(days=2)
     },
     {
-        'id': 2,
-        'name': 'Kubernetes Cluster',
-        'description': 'Managed Kubernetes clusters for container orchestration and microservices',
-        'category_id': 1,
-        'users': 85,
-        'request_method': 'Service Desk Ticket',
-        'sla': '4 hours',
-        'pic': 'DevOps Team',
-        'icon': 'fas fa-cubes'
-    },
-    {
         'id': 3,
-        'name': 'Load Balancer',
-        'description': 'Application load balancers for high availability and traffic distribution',
+        'name': 'WiFi Kampus',
+        'description': 'Akses internet nirkabel di seluruh area kampus',
         'category_id': 1,
-        'users': 120,
-        'request_method': 'Self-Service Portal',
-        'sla': '1 hour',
-        'pic': 'Network Team',
-        'icon': 'fas fa-balance-scale'
+        'users': 'Dosen, Mahasiswa, Staf',
+        'request_method': 'Helpdesk IT',
+        'sla': 'Respon 1 jam, selesai 1 hari',
+        'pic': 'Tim Jaringan',
+        'icon': 'fas fa-wifi',
+        'created_at': base_date,
+        'updated_at': now - timedelta(days=3)
     },
-    
-    # Development Tools
     {
         'id': 4,
-        'name': 'GitLab Repository',
-        'description': 'Git repositories with CI/CD pipelines and project management features',
+        'name': 'SIAKAD',
+        'description': 'Sistem Informasi Akademik untuk administrasi akademik',
         'category_id': 2,
-        'users': 200,
-        'request_method': 'Self-Service Portal',
-        'sla': '30 minutes',
-        'pic': 'Development Team',
-        'icon': 'fab fa-gitlab'
+        'users': 'Mahasiswa, Dosen, BAA',
+        'request_method': 'Helpdesk / Admin Prodi',
+        'sla': 'Respon 1 jam, selesai 1 hari',
+        'pic': 'TIM BAA',
+        'icon': 'fas fa-university',
+        'created_at': base_date,
+        'updated_at': now - timedelta(days=4)
     },
     {
         'id': 5,
-        'name': 'Jenkins Build Server',
-        'description': 'Automated build and deployment pipelines for continuous integration',
+        'name': 'PMB Online',
+        'description': 'Sistem Penerimaan Mahasiswa Baru secara online',
         'category_id': 2,
-        'users': 75,
-        'request_method': 'Service Desk Ticket',
-        'sla': '2 hours',
-        'pic': 'DevOps Team',
-        'icon': 'fas fa-hammer'
+        'users': 'Calon Mahasiswa, BAA',
+        'request_method': 'Website PMB',
+        'sla': 'Respon 30 menit, selesai 1 jam',
+        'pic': 'Tim Aplikasi',
+        'icon': 'fas fa-user-graduate',
+        'created_at': base_date,
+        'updated_at': now - timedelta(days=5)
     },
     {
         'id': 6,
-        'name': 'SonarQube Code Quality',
-        'description': 'Code quality analysis and security vulnerability scanning',
+        'name': 'E-Learning',
+        'description': 'Platform pembelajaran online untuk perkuliahan',
         'category_id': 2,
-        'users': 90,
-        'request_method': 'Self-Service Portal',
-        'sla': '1 hour',
-        'pic': 'Quality Assurance Team',
-        'icon': 'fas fa-search'
+        'users': 'Mahasiswa, Dosen',
+        'request_method': 'Helpdesk IT',
+        'sla': 'Respon 15 menit, selesai 1 jam',
+        'pic': 'Tim Aplikasi',
+        'icon': 'fas fa-laptop',
+        'created_at': base_date,
+        'updated_at': now - timedelta(days=6)
     },
-    
-    # Security Services
     {
         'id': 7,
-        'name': 'VPN Access',
-        'description': 'Secure remote access to internal networks and resources',
-        'category_id': 3,
-        'users': 250,
-        'request_method': 'Service Desk Ticket',
-        'sla': '24 hours',
-        'pic': 'Security Team',
-        'icon': 'fas fa-lock'
+        'name': 'My Wisuda',
+        'description': 'Sistem pendaftaran dan administrasi wisuda online',
+        'category_id': 2,
+        'users': 'Mahasiswa, Prodi, BAA',
+        'request_method': 'Helpdesk IT',
+        'sla': 'Respon 15 menit, selesai 1 jam',
+        'pic': 'Tim Aplikasi, Tim BAA',
+        'icon': 'fas fa-graduation-cap',
+        'created_at': base_date,
+        'updated_at': now - timedelta(days=7)
     },
     {
         'id': 8,
-        'name': 'SSL Certificate',
-        'description': 'SSL/TLS certificates for secure web communications',
+        'name': 'SIMPEQ',
+        'description': 'Sistem Informasi Manajemen Peralatan dan Equipment',
         'category_id': 3,
-        'users': 180,
-        'request_method': 'Service Desk Ticket',
-        'sla': '48 hours',
-        'pic': 'Security Team',
-        'icon': 'fas fa-certificate'
+        'users': 'TKD, Dosen, Tendik',
+        'request_method': 'Helpdesk IT',
+        'sla': 'Respon 1 jam, selesai 1 hari',
+        'pic': 'Tim Aplikasi',
+        'icon': 'fas fa-tools',
+        'created_at': base_date,
+        'updated_at': now - timedelta(days=8)
     },
     {
         'id': 9,
-        'name': 'Identity Management',
-        'description': 'User identity and access management with single sign-on',
+        'name': 'E-Office',
+        'description': 'Sistem administrasi perkantoran elektronik',
         'category_id': 3,
-        'users': 300,
-        'request_method': 'HR Approval Required',
-        'sla': '4 hours',
-        'pic': 'Identity Team',
-        'icon': 'fas fa-user-shield'
+        'users': 'Semua Unit',
+        'request_method': 'Helpdesk IT',
+        'sla': 'Respon 1 jam, selesai 1 hari',
+        'pic': 'Tim Aplikasi',
+        'icon': 'fas fa-briefcase',
+        'created_at': base_date,
+        'updated_at': now - timedelta(days=9)
     },
-    
-    # Monitoring & Analytics
     {
         'id': 10,
-        'name': 'Prometheus Monitoring',
-        'description': 'System and application monitoring with alerting capabilities',
+        'name': 'Helpdesk IT',
+        'description': 'Layanan bantuan teknis dan dukungan IT',
         'category_id': 4,
-        'users': 95,
-        'request_method': 'Self-Service Portal',
-        'sla': '2 hours',
-        'pic': 'Operations Team',
-        'icon': 'fas fa-eye'
+        'users': 'Semua Pengguna',
+        'request_method': 'Portal Helpdesk',
+        'sla': 'Respon 1 jam, selesai 1 hari',
+        'pic': 'Tim Support',
+        'icon': 'fas fa-headset',
+        'created_at': base_date,
+        'updated_at': now - timedelta(days=10)
     },
     {
         'id': 11,
-        'name': 'ELK Stack Logging',
-        'description': 'Centralized logging and log analysis with Elasticsearch, Logstash, and Kibana',
+        'name': 'Aplikasi Absensi',
+        'description': 'Sistem absensi digital untuk pegawai',
         'category_id': 4,
-        'users': 110,
-        'request_method': 'Service Desk Ticket',
-        'sla': '3 hours',
-        'pic': 'Operations Team',
-        'icon': 'fas fa-file-alt'
-    },
-    {
-        'id': 12,
-        'name': 'Grafana Dashboard',
-        'description': 'Customizable dashboards for metrics visualization and analysis',
-        'category_id': 4,
-        'users': 130,
-        'request_method': 'Self-Service Portal',
-        'sla': '1 hour',
-        'pic': 'Operations Team',
-        'icon': 'fas fa-tachometer-alt'
-    },
-    
-    # Communication & Collaboration
-    {
-        'id': 13,
-        'name': 'Microsoft Teams',
-        'description': 'Team communication, video conferencing, and file sharing platform',
-        'category_id': 5,
-        'users': 400,
-        'request_method': 'HR Approval Required',
-        'sla': '2 hours',
-        'pic': 'IT Support Team',
-        'icon': 'fab fa-microsoft'
-    },
-    {
-        'id': 14,
-        'name': 'Confluence Wiki',
-        'description': 'Team collaboration space for documentation and knowledge sharing',
-        'category_id': 5,
-        'users': 220,
-        'request_method': 'Self-Service Portal',
-        'sla': '1 hour',
-        'pic': 'Documentation Team',
-        'icon': 'fab fa-confluence'
-    },
-    {
-        'id': 15,
-        'name': 'Jira Project Management',
-        'description': 'Project tracking, issue management, and agile development workflows',
-        'category_id': 5,
-        'users': 180,
-        'request_method': 'Project Manager Approval',
-        'sla': '4 hours',
-        'pic': 'Project Management Office',
-        'icon': 'fab fa-jira'
+        'users': 'Dosen, Tendik',
+        'request_method': 'Helpdesk IT',
+        'sla': 'Respon 1 jam, selesai 1 hari',
+        'pic': 'Tim Aplikasi',
+        'icon': 'fas fa-clock',
+        'created_at': base_date,
+        'updated_at': now - timedelta(days=11)
     }
 ]
 
