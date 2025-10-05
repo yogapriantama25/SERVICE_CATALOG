@@ -164,8 +164,7 @@
                     </h6>
                 </div>
                 <div class="card-body p-0">
-                    {% for related_service in service.category.services.all|slice:":4" %}
-                        {% if related_service.id != service.id and related_service.is_active %}
+                    {% for related_service in related_services %}
                         <div class="p-3 border-bottom">
                             <h6 class="mb-1">
                                 <a href="{% url 'catalog:service_detail' related_service.id %}" 
@@ -175,7 +174,6 @@
                             </h6>
                             <small class="text-muted">{{ related_service.description|truncatewords:10 }}</small>
                         </div>
-                        {% endif %}
                     {% empty %}
                     <div class="p-3 text-center text-muted">
                         <i class="fas fa-info-circle me-1"></i>

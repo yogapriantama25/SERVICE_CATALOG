@@ -47,7 +47,7 @@
                 <div class="col-md-4 text-md-end">
                     <div class="stats-summary">
                         <div class="stats-card bg-secondary-custom text-primary-custom d-inline-block">
-                            <div class="stats-number h3 mb-0">{{ services.count }}</div>
+                            <div class="stats-number h3 mb-0">{{ services|length }}</div>
                             <div class="small">Layanan Tersedia</div>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                     <div class="stats-icon">
                         <i class="fas fa-cogs"></i>
                     </div>
-                    <div class="stats-number">{{ services.count }}</div>
+                    <div class="stats-number">{{ services|length }}</div>
                     <div class="text-muted">Total Layanan</div>
                 </div>
             </div>
@@ -241,7 +241,7 @@
                                 </div>
                                 <h6 class="card-title text-primary-custom">{{ other_category.name }}</h6>
                                 <p class="card-text text-muted small">
-                                    {{ other_category.services.count }} layanan
+                                    {{ other_category.service_count }} layanan
                                 </p>
                             </div>
                         </div>

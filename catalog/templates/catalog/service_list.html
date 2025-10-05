@@ -26,7 +26,7 @@
                             <i class="fas fa-clock me-1"></i>24/7 Support
                         </span>
                         <span class="badge bg-secondary-custom px-3 py-2">
-                            <i class="fas fa-users me-1"></i>{{ services.count }}+ Layanan
+                            <i class="fas fa-users me-1"></i>{{ services|length }}+ Layanan
                         </span>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                         <div class="stats-icon">
                             <i class="fas fa-layer-group"></i>
                         </div>
-                        <div class="stats-number">{{ categories.count }}</div>
+                        <div class="stats-number">{{ categories|length }}</div>
                         <div class="text-muted">Kategori Layanan</div>
                     </div>
                 </div>
@@ -68,11 +68,11 @@
                     <i class="fas fa-filter me-1"></i>Filter Kategori
                 </label>
                 <select class="form-select form-select-lg" id="category" name="category">
-                    <option value="">Semua Kategori ({{ categories.count }})</option>
+                    <option value="">Semua Kategori ({{ categories|length }})</option>
                     {% for category in categories %}
                         <option value="{{ category.id }}" 
                                 {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>
-                            {{ category.name }} ({{ category.services.count }})
+                            {{ category.name }} ({{ category.service_count }})
                         </option>
                     {% endfor %}
                 </select>
@@ -90,7 +90,7 @@
                 <div>
                     <small class="text-muted">
                         <i class="fas fa-info-circle me-1"></i>
-                        Menampilkan {{ services.count }} layanan
+                        Menampilkan {{ services|length }} layanan
                         {% if search_query %}untuk pencarian "{{ search_query }}"{% endif %}
                         {% if selected_category %}dalam kategori "{{ categories|first }}"{% endif %}
                     </small>
@@ -163,7 +163,7 @@
         </div>
 
         <!-- Pagination Placeholder -->
-        {% if services.count > 12 %}
+        {% if services|length > 12 %}
         <div class="text-center mt-5">
             <button class="btn btn-secondary" onclick="showMoreServices()">
                 <i class="fas fa-chevron-down me-1"></i>Muat Lebih Banyak
@@ -223,7 +223,7 @@
                             </div>
                             <h6 class="card-title text-primary-custom">{{ category.name }}</h6>
                             <p class="card-text text-muted small">
-                                {{ category.services.count }} layanan tersedia
+                                {{ category.service_count }} layanan tersedia
                             </p>
                         </div>
                     </div>
